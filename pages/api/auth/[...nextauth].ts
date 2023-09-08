@@ -1,19 +1,25 @@
 import NextAuth, { Session } from "next-auth"
-// import CognitoProvider from "next-auth/providers/cognito"
+import CognitoProvider from "next-auth/providers/cognito"
+import Auth0Provider from "next-auth/providers/auth0"
 import GoogleProvider from "next-auth/providers/google"
 
 export const authOptions = {
   // Configure one or more authentication providers
   providers: [
+    Auth0Provider({
+      clientId: process.env.AUTH0_CLIENT_ID || '',
+      clientSecret: process.env.AUTH0_CLIENT_SECRET || '',
+      issuer: process.env.AUTH0_ISSUER_BASE_URL || '',
+    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     }),
-    // CognitoProvider({
-    //   clientId: process.env.COGNITO_CLIENT_ID,
-    //   clientSecret: process.env.COGNITO_CLIENT_SECRET,
-    //   issuer: process.env.COGNITO_ISSUER,
-    // })
+    CognitoProvider({
+      clientId: process.env.COGNITO_CLIENT_ID || '',
+      clientSecret: process.env.COGNITO_CLIENT_SECRET || '',
+      issuer: process.env.COGNITO_ISSUER || '',
+    })
   ],
   callbacks: {
     async jwt({ token, account }) {
