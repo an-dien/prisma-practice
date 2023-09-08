@@ -5,16 +5,20 @@ import Layout from '../components/Layout'
 import { ApolloProvider } from '@apollo/client'
 import type { AppProps } from 'next/app'
 import apolloClient from '../lib/apollo'
+import { SessionProvider } from "next-auth/react"
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   return (
-    <UserProvider>
+    <SessionProvider session={session}>
       <ApolloProvider client={apolloClient}>
         <Layout>
-          <Component {...pageProps} />
+          <Component {...{...pageProps, session}} />
         </Layout>
       </ApolloProvider>
-    </UserProvider>
+    </SessionProvider>
   )
 }
 
